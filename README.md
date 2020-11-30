@@ -82,7 +82,7 @@ POST → http://localhost:8080/usuario -> Para crear un usuario nuevo
 ```
 Incluir en la peticion el token obtenido en el endpoint anterior como header
 Authorization Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI0MTFmOTkzMi0wMDk0LTQ3M2YtOGQ2Ny1kYjQ4YjdhYTdkZTEiLCJpYXQiOjE2MDY2ODIwNzcsImV4cCI6MTYwNjY4MjU3N30.lAEcTPh-ZAONQYuwf6Dy2RzDxTIEueScztKNr2n9dcEdFIRPmOkbbXdY-6xh-tSJGfc41v1BTaRCEs9_iC7-Gw
-GET → http://localhost:8080/{id} -> Para obtener todos los usuarios
+GET → http://localhost:8080/{id} -> Para obtener un usuario especifico
 ```
 
 ## Test ⚙️
