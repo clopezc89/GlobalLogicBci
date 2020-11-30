@@ -119,6 +119,8 @@ _Herramientas Utilizadas_
 * JPA - Java Persistence API
 * Hibernate - ORM
 * PostgreSQL - BD
+* Lombok 1.18.10
+* Spock 1.1 - Framework para Testear
 
 ## Consideraciones 🖇️
 
