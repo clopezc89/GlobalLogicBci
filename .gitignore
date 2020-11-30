@@ -12,3 +12,24 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+
+# Credential
+config
+
+# Gradle
+.gradle
+build
+gradle/
+gradlew
+gradlew.bat
+
+# Eclipse
+.settings
+.classpath
+.project
+
+# IDEA
+.idea
+*.iml
+*.DS_Store
