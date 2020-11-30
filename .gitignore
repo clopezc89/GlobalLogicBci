@@ -23,6 +23,7 @@ build
 gradle/
 gradlew
 gradlew.bat
+out
 
 # Eclipse
 .settings

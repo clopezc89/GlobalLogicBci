@@ -1,11 +1,11 @@
-# Mutant Service
+# GlobalLogicBci
 
-_Servicio que permite determinar si un dna ingresado corresponde a mutante o humano. Ademas por cada verificacion se guarda en una base de datos los dna ingresados solo una vez y se marcan como mutante o humano.
-Ademas se puede consumir otro servicio (/stats) que permite obtener las estadisticas de las verificaciones._
+_Servicio que permite crear y obtener usuarios creados. Inicialmente se hace una precarga en una BBDD Postgresql 
+embebida de 4 usuarios con sus respectivas validaciones._
 
 ## Comenzando 🚀
 
-_Estas instrucciones te permitirán obtener una copia del proyecto para hacerlo funcionar en tu maquina local y tambien para consumir el servicio directamente desde la nube._
+_Estas instrucciones te permitirán obtener una copia del proyecto para hacerlo funcionar en tu maquina local._
 
 
 ### Pre-requisitos 📋
@@ -13,11 +13,12 @@ _Estas instrucciones te permitirán obtener una copia del proyecto para hacerlo 
 _Que cosas necesitas para desplegar el servicio en tu maquina local._
 
 ```
-Java 8
-Maven
-Puerto 8081 disponible
+Java 8.
+Gradle.
+Puerto 8080 disponible.
+La BBDD asigna cualquier puerto disponible.
 Postman (Pero puede ser cualquier otro).
-
+Intellij Idea (Pero puede ser cualquier otro).
 ```
 
 ### Ejecucion en entorno local 🔧
@@ -26,40 +27,62 @@ _Para ejecutar el proyecto en tu maquina local sigue las siguientes instruccione
 
 _Clona el proyecto a tu maquina local_
 
-_Para generar el jar ejecuta los siguientes comando desde tu IDE o terminal_
+_Para compilar el servicio puedes ejecutar las tareas gradle desde tu IDE_
 
 ```
-mvn clean compile
-mvn clean install
+clean
+build
+bootRun
 ```
 
-_Para arrancar el servicio ejecuta la siguiente intruccion_
+_Para arrancar el servicio_
 
 ```
-java -jar mutant-service-0.0.1-SNAPSHOT.jar 
+Con la tarea bootRun se ha levantado el servicio en el puerto 8080
 ```
 
 _Ahora puedes consumir el servicio_
 
 ```
-POST → http://localhost:8081/mutant/
-{ “dna”:["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"] }
+GET → http://localhost:8080/usuario/autenticar -> Para obtener un token valido
+
 ```
 
 ```
-GET → http://ec2-54-193-15-231.us-west-1.compute.amazonaws.com:8081/stats
-```
-### Ejecucion en la nube 🔧
-
-_Para consumir el servicio alojado en la nube_
-
-```
-POST → http://ec2-54-193-15-231.us-west-1.compute.amazonaws.com:8081/mutant/
-{ “dna”:["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"] }
+Incluir en la peticion el token obtenido en el endpoint anterior como header
+Authorization Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI0MTFmOTkzMi0wMDk0LTQ3M2YtOGQ2Ny1kYjQ4YjdhYTdkZTEiLCJpYXQiOjE2MDY2ODIwNzcsImV4cCI6MTYwNjY4MjU3N30.lAEcTPh-ZAONQYuwf6Dy2RzDxTIEueScztKNr2n9dcEdFIRPmOkbbXdY-6xh-tSJGfc41v1BTaRCEs9_iC7-Gw
+GET → http://localhost:8080/usuario/all -> Para obtener todos los usuarios
 ```
 
 ```
-GET → http://ec2-54-193-15-231.us-west-1.compute.amazonaws.com:8081/stats
+Incluir en la peticion el token obtenido en el endpoint anterior como header
+Authorization Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI0MTFmOTkzMi0wMDk0LTQ3M2YtOGQ2Ny1kYjQ4YjdhYTdkZTEiLCJpYXQiOjE2MDY2ODIwNzcsImV4cCI6MTYwNjY4MjU3N30.lAEcTPh-ZAONQYuwf6Dy2RzDxTIEueScztKNr2n9dcEdFIRPmOkbbXdY-6xh-tSJGfc41v1BTaRCEs9_iC7-Gw
+POST → http://localhost:8080/usuario -> Para crear un usuario nuevo
+{
+    "name": Cristian,
+    "email": "cristian@gmail.com",
+    "password": Abcdas11#,
+    "isActive": true,
+    "lastLogin": "2020-11-29",
+    "phones": [
+        {
+            "number": "123",
+            "cityCode": "1",
+            "contryCode": "2"
+        },
+        {
+            "number": "456",
+            "cityCode": "3",
+            "contryCode": "4"
+        }
+    ]
+}
+```
+
+```
+Incluir en la peticion el token obtenido en el endpoint anterior como header
+Authorization Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI0MTFmOTkzMi0wMDk0LTQ3M2YtOGQ2Ny1kYjQ4YjdhYTdkZTEiLCJpYXQiOjE2MDY2ODIwNzcsImV4cCI6MTYwNjY4MjU3N30.lAEcTPh-ZAONQYuwf6Dy2RzDxTIEueScztKNr2n9dcEdFIRPmOkbbXdY-6xh-tSJGfc41v1BTaRCEs9_iC7-Gw
+GET → http://localhost:8080/{id} -> Para obtener todos los usuarios
 ```
 
 ## Test ⚙️
@@ -67,27 +90,35 @@ GET → http://ec2-54-193-15-231.us-west-1.compute.amazonaws.com:8081/stats
 _Para ejecutar los test_
 
 ```
-mvn test
+Si estan trabajando con Intellij Idea y tienen problemas con ejecutar los test
+comprueben que los parametros de gradle (dentro de Preferencias) contengan los siguientes valores:
+
+Build an run using : Intellij Idea
+Run test using : Intellij Idea
+
+Ahora dentro del apartado Runner deja las siguientes opciones marcadas:
+Marcar la opcion Delegate IDE build/run action to gradle
+Run test using : Gradle Test Runner
+
+Finalmente tambien dentro de Preferencias:
+Ir a Compiler -> Annotations Processor -> Marcar opcion enable annotation processing
 ```
 
 _Cobertura de test_
 
-```
-class	85% (12/14)  method	89% (43/48)  line	93% (123/132)
+```			
+class	83% (25/30)  method	83% (90/108)  line	84% (232/274)
 ```
 
 ## Construido con 🛠️
 
-_Menciona las herramientas que utilizaste para crear tu proyecto_
+_Herramientas que utilizaste para crear tu proyecto_
 
-* SpringBoot 2.1.8.RELEASE - Framework
-* Maven 3.6.1 - Manejador de dependencias
+* SpringBoot 2.0.1.RELEASE - Framework
+* Gradle - Manejador de dependencias
 * JPA - Java Persistence API
 * Hibernate - ORM
-* HikariCP - Pool ligero de conexiones JDBC
 * PostgreSQL - BD
-* AWS EC2 Intance
-* AWS RDS PostgreSQL
 
 ## Consideraciones 🖇️
 
@@ -98,23 +129,23 @@ Eureka como register service
 ```
 
 ```
-Zuul como edge service 
+Zuul como Edge Service 
 ```
 
 ```
-Ribbon como load balancer
+Ribbon como Load Balancer
 ```
 
 ```
-Spring Cloud Config como configuration properties management
+Spring Cloud Config como Configuration Properties Management
 ```
 
 ```
-hystrix como circuit breaker
+Hystrix como Circuit Breaker
 ```
 
 ```
-Feign como declarative rest client
+Feign como Declarative Rest Client
 ```
 
 
