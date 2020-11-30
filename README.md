@@ -112,7 +112,7 @@ class	83% (25/30)  method	83% (90/108)  line	84% (232/274)
 
 ## Construido con 🛠️
 
-_Herramientas que utilizaste para crear tu proyecto_
+_Herramientas Utilizadas_
 
 * SpringBoot 2.0.1.RELEASE - Framework
 * Gradle - Manejador de dependencias
